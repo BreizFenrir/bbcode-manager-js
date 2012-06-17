@@ -11,4 +11,17 @@
 	<packaging>pom</packaging>
 
 	<name>Core class for the BBCode manager</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jslint-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.github.searls</groupId>
+				<artifactId>jasmine-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
