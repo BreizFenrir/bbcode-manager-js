@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>info.fen-code.web</groupId>
+	<artifactId>bbcode-manager-js</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Javascript BBCode manager</name>
+	<inceptionYear>2012</inceptionYear>
+	<developers>
+		<developer>
+			<id>Fen</id>
+			<email>fen@fen-code.info</email>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+	<modules>
+		<module>core</module>
+		<module>ext-youtube</module>
+		<module>ext-strike</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jsMainDir>src/main/javascript</jsMainDir>
+		<jsTestDir>src/test/javascript</jsTestDir>
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${jsMainDir}</directory>
+			</resource>
+		</resources>
+
+		<testResources>
+			<testResource>
+				<directory>${jsTestDir}</directory>
+			</testResource>
+		</testResources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jslint-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<executions>
+					<execution>
+						<id>exec</id>
+						<goals>
+							<goal>jslint</goal>
+						</goals>
+						<configuration>
+							<sourceJsFolder>${jsMainDir}</sourceJsFolder>
+						</configuration>
+					</execution>
+					<execution>
+						<id>test-exec</id>
+						<goals>
+							<goal>test-jslint</goal>
+						</goals>
+						<configuration>
+							<sourceJsFolder>${jsTestDir}</sourceJsFolder>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<allowOneVarStatementPerFunction>false</allowOneVarStatementPerFunction>
+					<assumeABrowser>false</assumeABrowser>
+					<disallowDanglingUnderbarInIdentifiers>true</disallowDanglingUnderbarInIdentifiers>
+					<disallowInsecureCharsInRegExp>false</disallowInsecureCharsInRegExp>
+					<disallowUndefinedVariables>false</disallowUndefinedVariables>
+					<excludes>
+						<exclude>lib/*</exclude>
+					</excludes>
+					<tolerateUnfilteredForIn>false</tolerateUnfilteredForIn>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.searls</groupId>
+				<artifactId>jasmine-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<jsSrcDir>${jsMainDir}</jsSrcDir>
+					<jsTestSrcDir>${jsTestDir}</jsTestSrcDir>
+					<preloadSources>
+						<preloadSource>lib/mootools-core-1.4.5-full-nocompat.js</preloadSource>
+					</preloadSources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<scm>
+		<connection>scm:git:git://github.com/BreizFenrir/bbcode-manager-js.git</connection>
+		<developerConnection>scm:git:https://github.com/BreizFenrir/bbcode-manager-js.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/BreizFenrir/bbcode-manager-js</url>
+	</scm>
+</project>
