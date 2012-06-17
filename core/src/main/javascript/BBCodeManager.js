@@ -41,7 +41,7 @@ info.fen_code.BBCodeManager = function() {
 
 /** Provided with a string describing a BBCode element, returns a structure describing that element */
 info.fen_code.BBCodeManager.parseBBCode = function(bbcodeStr) {
-	var tmp = bbcodeStr.match(/^\[([^=]+)(=[^\]]+)?\](.*)\[\/([^\]]+)\]$/i);
+	var tmp = bbcodeStr.match(/^\[([^=\]]+)(=[^\]]+)?\](.*)\[\/([^\[\]]+)\]$/i);
 	if (tmp) {
 		// Opening and ending tag must match
 		var reg = new RegExp('^' + tmp[1] + '$', 'i');
