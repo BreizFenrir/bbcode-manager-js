@@ -6,6 +6,7 @@
 		<groupId>info.fen-code.web</groupId>
 		<artifactId>bbcode-manager-js</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>bbcode-manager-js-ext-strike</artifactId>
 	<packaging>pom</packaging>

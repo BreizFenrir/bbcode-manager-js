@@ -23,14 +23,15 @@ info.fen_code.BBCodeManager = function() {
 	/** Applies the BBCode filters to a set of DOM trees */
 	this.applyTo = function(domTrees) {
 		domTrees.each(function(domTree) {
-			var domTreeStr = domTree.get('html');
-			var elems = domTreeStr.match(/\[[^\]]+\][^\[]*\[\/[^\]]+\]/g);
+			var domTreeStr = domTree.get('html'),
+			    elems = domTreeStr.match(/\[[^\]]+\][^\[]*\[\/[^\]]+\]/g);
 			if (elems) {
 				elems.each(function(elem) {
-					var bbcode = info.fen_code.BBCodeManager.parseBBCode(elem);
+					var bbcode = info.fen_code.BBCodeManager.parseBBCode(elem),
+					    bbcodeRep;
 					if (typeof bbcode === 'object'
 							&& typeof this.bbcodes[bbcode.name] === 'function') {
-						var bbcodeRep = this.bbcodes[bbcode.name](bbcode);
+						bbcodeRep = this.bbcodes[bbcode.name](bbcode);
 						domTreeStr.split(elem).join(bbcodeRep);
 					}
 				});
@@ -41,12 +42,13 @@ info.fen_code.BBCodeManager = function() {
 
 /** Provided with a string describing a BBCode element, returns a structure describing that element */
 info.fen_code.BBCodeManager.parseBBCode = function(bbcodeStr) {
-	var tmp = bbcodeStr.match(/^\[([^=\]]+)(=[^\]]+)?\](.*)\[\/([^\[\]]+)\]$/i);
+	var tmp = bbcodeStr.match(/^\[([^=\]]+)(=[^\]]+)?\](.*)\[\/([^\[\]]+)\]$/i),
+	    reg, param;
 	if (tmp) {
 		// Opening and ending tag must match
-		var reg = new RegExp('^' + tmp[1] + '$', 'i');
+		reg = new RegExp('^' + tmp[1] + '$', 'i');
 		if (tmp[4].match(reg)) {
-			var param = (tmp[2] ? tmp[2].substr(1) : '');
+			param = (tmp[2] ? tmp[2].substr(1) : '');
 			return {
 				'name': tmp[1].toLowerCase(),
 				'param': param,

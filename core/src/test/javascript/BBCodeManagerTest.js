@@ -1,7 +1,7 @@
 // Jasmine test file
-var clazz = info.fen_code.BBCodeManager;
-var testTag = 'a';
-var testReplaceFct = function(bbcode) {
+var clazz = info.fen_code.BBCodeManager,
+    testTag = 'a',
+    testReplaceFct = function(bbcode) {
 		return bbcode.name + ' : ' + bbcode.param + ' -> ' + bbcode.content;
 	};
 
@@ -23,8 +23,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : '',
 				content : ''
-			};
-			var parsed = clazz.parseBBCode('[a][/a]');
+			},
+			    parsed = clazz.parseBBCode('[a][/a]');
 			expect(parsed).toEqual(exp);
 		});
 	it('recognizes the BBCode "[a]text[/a]"', function() {
@@ -32,8 +32,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : '',
 				content : 'text'
-			};
-			var parsed = clazz.parseBBCode('[a]text[/a]');
+			},
+			    parsed = clazz.parseBBCode('[a]text[/a]');
 			expect(parsed).toEqual(exp);
 		});
 	it('recognizes the BBCode "[a=url][/a]"', function() {
@@ -41,8 +41,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : 'url',
 				content : ''
-			};
-			var parsed = clazz.parseBBCode('[a=url][/a]');
+			},
+			    parsed = clazz.parseBBCode('[a=url][/a]');
 			expect(parsed).toEqual(exp);
 		});
 	it('recognizes the BBCode "[a=url]text[/a]"', function() {
@@ -50,8 +50,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : 'url',
 				content : 'text'
-			};
-			var parsed = clazz.parseBBCode('[a=url]text[/a]');
+			},
+			    parsed = clazz.parseBBCode('[a=url]text[/a]');
 			expect(parsed).toEqual(exp);
 		});
 
@@ -60,8 +60,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : '',
 				content : 'test with ]'
-			};
-			var parsed = clazz.parseBBCode('[a]test with ][/a]');
+			},
+			    parsed = clazz.parseBBCode('[a]test with ][/a]');
 			expect(parsed).toEqual(exp);
 		});
 	it('recognizes BBCode "[a=url with [][/a]"', function() {
@@ -69,8 +69,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : 'url with [',
 				content : ''
-			};
-			var parsed = clazz.parseBBCode('[a=url with [][/a]');
+			},
+			    parsed = clazz.parseBBCode('[a=url with [][/a]');
 			expect(parsed).toEqual(exp);
 		});
 	it('recognizes BBCode "[a][b][/a]"', function() {
@@ -78,8 +78,17 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : '',
 				content : '[b]'
-			};
-			var parsed = clazz.parseBBCode('[a][b][/a]');
+			},
+			    parsed = clazz.parseBBCode('[a][b][/a]');
+			expect(parsed).toEqual(exp);
+		});
+	it('recognizes BBCode "[a]=b][/a]"', function() {
+			var exp = {
+				name : 'a',
+				param : '',
+				content : '=b]'
+			},
+			    parsed = clazz.parseBBCode('[a]=b][/a]');
 			expect(parsed).toEqual(exp);
 		});
 
@@ -88,8 +97,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : '',
 				content : '[a]'
-			};
-			var parsed = clazz.parseBBCode('[a][a][/a]');
+			},
+			    parsed = clazz.parseBBCode('[a][a][/a]');
 			expect(parsed).toEqual(exp);
 		});
 	it('recognizes one of the possibilities in confusing BBCode "[a=url with []][/a]"', function() {
@@ -97,8 +106,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 				name : 'a',
 				param : 'url with [',
 				content : ']'
-			};
-			var parsed = clazz.parseBBCode('[a=url with []][/a]');
+			},
+			    parsed = clazz.parseBBCode('[a=url with []][/a]');
 			expect(parsed).toEqual(exp);
 		});
 
@@ -116,6 +125,10 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 		});
 	it('does not recognize non-isolated BBCode "[a][/a] "', function() {
 			var parsed = clazz.parseBBCode('[a][/a] ');
+			expect(parsed).not.toBeDefined();
+		});
+	it('does not recognize bad BBCode "[[a][/[a] "', function() {
+			var parsed = clazz.parseBBCode('[[a][/[a] ');
 			expect(parsed).not.toBeDefined();
 		});
 	});
