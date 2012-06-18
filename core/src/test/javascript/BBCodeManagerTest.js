@@ -8,9 +8,9 @@ var clazz = info.fen_code.BBCodeManager,
 describe('The BBCodeManager constructor', function() {
 	it('builds an instance of BBCodeManager', function() {
 		var instance = new info.fen_code.BBCodeManager();
-		expect(typeof instance).toEqual('object');
-		expect(typeof instance.addBBCode).toEqual('function');
-		expect(typeof instance.applyTo).toEqual('function');
+		expect(instance).toEqual(jasmine.any(Object));
+		expect(instance.addBBCode).toEqual(jasmine.any(Function));
+		expect(instance.applyTo).toEqual(jasmine.any(Function));
 	});
 });
 
@@ -176,8 +176,8 @@ describe('The BBCodeManager.parseBBCode class method', function() {
 
 describe('The BBCodeManager.INSTANCE pseudo-singleton', function() {
 	it('exists', function() {
-		expect(typeof clazz.INSTANCE).toEqual('object');
-		expect(typeof clazz.INSTANCE.addBBCode).toEqual('function');
-		expect(typeof clazz.INSTANCE.applyTo).toEqual('function');
+		expect(clazz.INSTANCE).toEqual(jasmine.any(Object));
+		expect(clazz.INSTANCE.addBBCode).toEqual(jasmine.any(Function));
+		expect(clazz.INSTANCE.applyTo).toEqual(jasmine.any(Function));
 	});
 });
