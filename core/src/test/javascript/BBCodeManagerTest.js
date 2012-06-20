@@ -44,7 +44,81 @@ describe('The BBCodeManager.addBBCode method', function() {
 });
 
 describe('The BBCodeManager.applyTo method', function() {
-	// TODO Test thoroughly
+	var instance;
+
+	beforeEach(function() {
+		instance = new info.fen_code.BBCodeManager();
+		instance.addBBCode(testTag, testReplaceFct);
+		instance.addBBCode('b', function(bbcode) {
+			return bbcode.content;
+		});
+	});
+
+	it('leaves untouched content with no tag inside', function() {
+		var domTrees =    [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>' }) ],
+		    expDomTrees = [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>' }) ];
+
+		instance.applyTo(domTrees);
+		expect(domTrees).toEqual(expDomTrees);
+	});
+	
+	it('leaves untouched unrecognized (i.e. bad) BBCode', function() {
+		var domTrees =    [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, consectetur [a]text[/b] adipiscing elit.</p>' }) ],
+		    expDomTrees = [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, consectetur [a]text[/b] adipiscing elit.</p>' }) ];
+
+		instance.applyTo(domTrees);
+		expect(domTrees).toEqual(expDomTrees);
+	});
+	
+	it('leaves untouched unknown (i.e. undeclared) BBCode', function() {
+		var domTrees =    [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, consectetur [c=aaa]text[/c] adipiscing elit.</p>' }) ],
+		    expDomTrees = [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, consectetur [c=aaa]text[/c] adipiscing elit.</p>' }) ];
+
+		instance.applyTo(domTrees);
+		expect(domTrees).toEqual(expDomTrees);
+	});
+	
+	it('changes a single-use BBCode found in a simple DOM tree', function() {
+		var domTrees =    [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, consectetur [a=c]text[/a] adipiscing elit.</p>' }) ],
+		    expDomTrees = [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, consectetur a : c -&gt; text adipiscing elit.</p>' }) ];
+
+		instance.applyTo(domTrees);
+		expect(domTrees).toEqual(expDomTrees);
+	});
+	
+	it('changes several instances of a BBCode found in a simple DOM tree', function() {
+		var domTrees =    [ new Element('div', { html : '<p>Lorem ipsum [a=dolor]sit[/a] amet, consectetur [a=c]text[/a] adipiscing elit.</p>' }) ],
+		    expDomTrees = [ new Element('div', { html : '<p>Lorem ipsum a : dolor -&gt; sit amet, consectetur a : c -&gt; text adipiscing elit.</p>' }) ];
+
+		instance.applyTo(domTrees);
+		expect(domTrees).toEqual(expDomTrees);
+	});
+	
+	it('changes several instances of several BBCodes found in a more complex DOM tree', function() {
+		var domTrees =    [ new Element('div', { html : '<p>Lorem [b]ipsum[/b] [a=dolor]sit[/a] amet, consectetur [a=c]text[/a] [b]adipiscing elit[/b].</p>' }) ],
+		    expDomTrees = [ new Element('div', { html : '<p>Lorem ipsum a : dolor -&gt; sit amet, consectetur a : c -&gt; text adipiscing elit.</p>' }) ];
+
+		instance.applyTo(domTrees);
+		expect(domTrees).toEqual(expDomTrees);
+	});
+	
+	it('works as well when several DOM trees are provided', function() {
+		var domTrees =    [ new Element('div', { html : '<p>Lorem ipsum [a=dolor]sit[/a] amet, consectetur [a=c]text[/a] adipiscing elit.</p>' }),
+				            new Element('div', { html : '<p>Lorem [b]ipsum[/b] [a=dolor]sit[/a] amet, consectetur [a=c]text[/a] [b]adipiscing elit[/b].</p>' }) ],
+		    expDomTrees = [ new Element('div', { html : '<p>Lorem ipsum a : dolor -&gt; sit amet, consectetur a : c -&gt; text adipiscing elit.</p>' }),
+		                    new Element('div', { html : '<p>Lorem ipsum a : dolor -&gt; sit amet, consectetur a : c -&gt; text adipiscing elit.</p>' }) ];
+
+		instance.applyTo(domTrees);
+		expect(domTrees).toEqual(expDomTrees);
+	});
+	
+	it('only changes the inner BBCode when provided with a BBCode inside a BBCode', function() {
+		var domTrees =    [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, [b]consectetur [a=c]text[/a][/b] adipiscing elit.</p>' }) ],
+		    expDomTrees = [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet, [b]consectetur a : c -&gt; text[/b] adipiscing elit.</p>' }) ];
+
+		instance.applyTo(domTrees);
+		expect(domTrees).toEqual(expDomTrees);
+	});
 });
 
 describe('The BBCodeManager.parseBBCode class method', function() {

@@ -34,9 +34,10 @@ info.fen_code.BBCodeManager = function() {
 						bbcodeRep = this.bbcodes[bbcode.name](bbcode);
 						domTreeStr.split(elem).join(bbcodeRep);
 					}
-				});
+				}, this);
 			}
-		});
+			domTree.set('html', domTreeStr);
+		}, this);
 	};
 };
 
