@@ -68,6 +68,7 @@
 						</execution>
 					</executions>
 					<configuration>
+						<allowOneVarStatementPerFunction>false</allowOneVarStatementPerFunction>
 						<disallowDanglingUnderbarInIdentifiers>true</disallowDanglingUnderbarInIdentifiers>
 						<disallowInsecureCharsInRegExp>false</disallowInsecureCharsInRegExp>
 						<disallowUndefinedVariables>false</disallowUndefinedVariables>

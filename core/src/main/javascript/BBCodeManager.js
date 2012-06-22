@@ -23,8 +23,8 @@ info.fen_code.BBCodeManager = function() {
 	/** Applies the BBCode filters to a set of DOM trees */
 	this.applyTo = function(domTrees) {
 		domTrees.each(function(domTree) {
-			var domTreeStr = domTree.get('html'),
-			    elems = domTreeStr.match(/\[[^\]]+\][^\[]*\[\/[^\]]+\]/g);
+			var domTreeStr = domTree.get('html');
+			var elems = domTreeStr.match(/\[[^\]]+\][^\[]*\[\/[^\]]+\]/g);
 			if (elems) {
 				elems.each(function(elem) {
 					var bbcode = info.fen_code.BBCodeManager.parseBBCode(elem),
