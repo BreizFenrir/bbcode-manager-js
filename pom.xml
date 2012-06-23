@@ -68,10 +68,8 @@
 						</execution>
 					</executions>
 					<configuration>
-						<allowOneVarStatementPerFunction>false</allowOneVarStatementPerFunction>
 						<disallowDanglingUnderbarInIdentifiers>true</disallowDanglingUnderbarInIdentifiers>
 						<disallowInsecureCharsInRegExp>false</disallowInsecureCharsInRegExp>
-						<disallowUndefinedVariables>false</disallowUndefinedVariables>
 						<excludes>
 							<exclude>lib/*</exclude>
 						</excludes>

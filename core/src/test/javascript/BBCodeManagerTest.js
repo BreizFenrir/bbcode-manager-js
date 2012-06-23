@@ -54,6 +54,20 @@ describe('The BBCodeManager.applyTo method', function() {
 		});
 	});
 
+	it('fails if the parameter is not an array', function() {
+		var notAnArray = function() {
+			instance.applyTo(3);
+		};
+		expect(notAnArray).toThrow();
+	});
+
+	it('fails if the parameter is not an array of objects', function() {
+		var notAnArrayOfObjects = function() {
+			instance.applyTo([3, 4]);
+		};
+		expect(notAnArrayOfObjects).toThrow();
+	});
+
 	it('leaves untouched content with no tag inside', function() {
 		var domTrees = [ new Element('div', { html : '<p>Lorem ipsum dolor sit amet.</p><p>Consectetur adipiscing elit.</p>' }) ],
 		    expDomTreeStr = '<p>Lorem ipsum dolor sit amet.</p><p>Consectetur adipiscing elit.</p>';
@@ -125,7 +139,42 @@ describe('The BBCodeManager.applyTo method', function() {
 	});
 });
 
+describe('The BBCodeManager.findBBCodes class method', function() {
+	it('fails if not provided with a string', function() {
+		var notAString = function() {
+			clazz.findBBCode(function() {});
+		};
+		expect(notAString).toThrow();
+	});
+
+	it('returns an empty array when no BBCode is found', function() {
+		var exp = [],
+		    found = clazz.findBBCodes('Lorem ipsum dolor sit amet.');
+		expect(found).toEqual(exp);
+	});
+
+	it('returns the existing BBCode', function() {
+		var found = clazz.findBBCodes('Lorem ipsum [a][/a]dolor sit amet.');
+		expect(found).toContain('[a][/a]');
+	});
+
+	it('returns the existing BBCodes', function() {
+		var found = clazz.findBBCodes('[b=aaa]Lorem ipsum[/b] [a][/a]dolor sit [c]amet[/c].');
+		expect(found).toContain('[b=aaa]Lorem ipsum[/b]');
+		expect(found).toContain('[a][/a]');
+		expect(found).toContain('[c]amet[/c]');
+		
+	});
+});
+
 describe('The BBCodeManager.parseBBCode class method', function() {
+	it('throws an error if not provided with a string', function() {
+		var notAString = function() {
+			clazz.parseBBCode(function() {});
+		};
+		expect(notAString).toThrow();
+	});
+
 	it('recognizes the BBCode "[a][/a]"', function() {
 		var exp = {
 			name : 'a',
