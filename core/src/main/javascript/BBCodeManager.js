@@ -5,14 +5,20 @@ if (typeof info.fen_code === 'undefined') {
 	info.fen_code = {};
 }
 
-/** BBCode class */
+/** BBCodeElem class */
 info.fen_code.BBCodeElem = function(name, param, content) {
-	/** Tag name */
-	this.name = name;
-	/** Tag parameter, i.e. everything after a '=' within the opening tag * */
-	this.param = param;
-	/** Tag content */
-	this.content = content;
+	if (typeof name === 'string' && typeof param === 'string' && typeof content === 'string') {
+		/** Tag name */
+		this.name = name;
+		/** Tag parameter, i.e. everything after a '=' within the opening tag * */
+		this.param = param;
+		/** Tag content */
+		this.content = content;
+	} else {
+		throw new Error('Illegal datatype for BBCodeElem constructor parameters, expected '
+			+ '(string, string, string) but was (' + typeof name + ', ' + typeof param + ', '
+			+ typeof content + ')');
+	}
 	
 	/** Provides a string representation of the object */
 	this.toString = function() {
@@ -46,7 +52,7 @@ info.fen_code.BBCodeManager = function() {
 					elems.each(function(elem) {
 						var bbcode = info.fen_code.BBCodeManager.parseBBCode(elem);
 						if (bbcode instanceof info.fen_code.BBCodeElem) {
-							this.replaceBBCode(bbcode, domTreeStr);
+							domTreeStr = this.replaceBBCode(bbcode, domTreeStr);
 						}
 					}, this);
 					domTree.set('html', domTreeStr);
@@ -65,7 +71,9 @@ info.fen_code.BBCodeManager = function() {
 		if (bbcode instanceof info.fen_code.BBCodeElem && typeof domTreeStr === 'string') {
 			if (this.bbcodes[bbcode.name]) {
 				var bbcodeRep = this.bbcodes[bbcode.name](bbcode);
-				domTreeStr.split(bbcode.toString()).join(bbcodeRep);
+				return domTreeStr.split(bbcode.toString()).join(bbcodeRep);
+			} else {
+				return domTreeStr;
 			}
 		} else {
 			throw new Error('Illegal datatype for replaceBBCode, expected '
